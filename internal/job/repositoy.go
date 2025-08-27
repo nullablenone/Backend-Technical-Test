@@ -4,6 +4,7 @@ import "gorm.io/gorm"
 
 type Repository interface {
 	CreateJob(job *Job) error
+	GetAllJob(request GetAllJobsRequest) ([]Job, error)
 }
 
 type repository struct {
@@ -26,4 +27,23 @@ func (r *repository) CreateJob(job *Job) error {
 	}
 
 	return nil
+}
+
+func (r *repository) GetAllJob(request GetAllJobsRequest) ([]Job, error) {
+
+	var jobs []Job
+
+	query := r.DB.Preload("Company").Order("created_at DESC")
+
+	if request.Keyword != "" {
+		searchKeyword := "%" + request.Keyword + "%"
+		query = query.Where("title ILIKE ? OR description ILIKE ?", searchKeyword, searchKeyword)
+	}
+
+	err := query.Find(&jobs).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return jobs, nil
 }

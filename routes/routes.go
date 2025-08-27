@@ -10,6 +10,7 @@ func SetupRoutes(jobHandler *job.Handler) *gin.Engine {
 	router := gin.Default()
 
 	router.POST("/jobs", jobHandler.CreateJobHandler)
+	router.GET("/jobs", jobHandler.GetAllJobHandler)
 
 	return router
 }
