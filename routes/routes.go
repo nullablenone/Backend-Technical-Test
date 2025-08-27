@@ -1,15 +1,15 @@
 package routes
 
-import "github.com/gin-gonic/gin"
+import (
+	"redikru-test/internal/job"
 
-func SetupRoutes() *gin.Engine {
+	"github.com/gin-gonic/gin"
+)
+
+func SetupRoutes(jobHandler *job.Handler) *gin.Engine {
 	router := gin.Default()
 
-	router.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
+	router.POST("/jobs", jobHandler.CreateJobHandler)
 
 	return router
 }
