@@ -40,6 +40,11 @@ func (r *repository) GetAllJob(request GetAllJobsRequest) ([]Job, error) {
 		query = query.Where("title ILIKE ? OR description ILIKE ?", searchKeyword, searchKeyword)
 	}
 
+	if request.CompanyName != "" {
+		query = query.Joins("JOIN companies ON companies.id = jobs.company_id").
+			Where("companies.name ILIKE ?", "%"+request.CompanyName+"%")
+	}
+
 	err := query.Find(&jobs).Error
 	if err != nil {
 		return nil, err

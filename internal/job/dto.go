@@ -7,6 +7,6 @@ type CreateJobRequest struct {
 }
 
 type GetAllJobsRequest struct {
-	Keyword string `form:"keyword"`
+	Keyword     string `form:"keyword"`
+	CompanyName string `form:"companyName"`
 }
-
