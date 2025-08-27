@@ -1,7 +1,7 @@
 package job
 
 import (
-	"redikru-test/internal/company"
+	"redikru-test/internal/domain/company"
 	"time"
 )
 

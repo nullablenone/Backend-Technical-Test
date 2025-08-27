@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"redikru-test/internal/job"
+	"redikru-test/internal/domain/job"
 
 	"github.com/gin-gonic/gin"
 )

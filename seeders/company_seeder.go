@@ -2,14 +2,14 @@ package seeders
 
 import (
 	"log"
-	"redikru-test/internal/company"
+	"redikru-test/internal/domain/company"
 
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
 func SeedCompanies(db *gorm.DB) {
-	
+
 	companies := []company.Company{
 		{Name: "Redikru"},
 		{Name: "Google"},

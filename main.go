@@ -3,8 +3,9 @@ package main
 import (
 	"log"
 	"redikru-test/config"
-	"redikru-test/internal/company"
-	"redikru-test/internal/job"
+	"redikru-test/internal/domain/company"
+	"redikru-test/internal/domain/job"
+
 	"redikru-test/routes"
 	"redikru-test/seeders"
 )
@@ -25,7 +26,7 @@ func main() {
 	seeders.SeedCompanies(db)
 
 	// setup domain job
-	jobRepository := job.NewRepository(db) 
+	jobRepository := job.NewRepository(db)
 	jobService := job.NewService(jobRepository)
 	jobHandler := job.NewHandler(jobService)
 
