@@ -1,5 +1,7 @@
 package job
 
+import "redikru-test/utils"
+
 type CreateJobRequest struct {
 	Title       string `json:"title" binding:"required"`
 	Description string `json:"description" binding:"required"`
@@ -11,4 +13,10 @@ type GetAllJobsRequest struct {
 	CompanyName string `form:"companyName"`
 	Page        int    `form:"page"`
 	Limit       int    `form:"limit"`
+}
+
+// cache
+type cachedJobsResponse struct {
+	Jobs       []Job            `json:"jobs"`
+	Pagination utils.Pagination `json:"pagination"`
 }

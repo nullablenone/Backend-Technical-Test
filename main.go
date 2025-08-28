@@ -26,11 +26,11 @@ func main() {
 	seeders.SeedCompanies(db)
 
 	// setup redis
-	config.ConnectRedis()
+	redisClient := config.ConnectRedis()
 
 	// setup domain job
 	jobRepository := job.NewRepository(db)
-	jobService := job.NewService(jobRepository)
+	jobService := job.NewService(jobRepository, redisClient)
 	jobHandler := job.NewHandler(jobService)
 
 	router := routes.SetupRoutes(jobHandler)
