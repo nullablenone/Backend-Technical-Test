@@ -1,6 +1,11 @@
 package job
 
-import "gorm.io/gorm"
+import (
+	"errors"
+	appErrors "redikru-test/internal/errors"
+
+	"gorm.io/gorm"
+)
 
 type Repository interface {
 	CreateJob(job *Job) error
@@ -15,22 +20,28 @@ func NewRepository(db *gorm.DB) Repository {
 	return &repository{DB: db}
 }
 
+
 func (r *repository) CreateJob(job *Job) error {
 	err := r.DB.Create(job).Error
+
 	if err != nil {
-		return err
+		return appErrors.ErrInternalServer
 	}
 
 	err = r.DB.Preload("Company").First(job, "id = ?", job.ID).Error
 	if err != nil {
-		return err
+
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return appErrors.ErrNotFound
+		}
+
+		return appErrors.ErrInternalServer
 	}
 
 	return nil
 }
 
 func (r *repository) GetAllJob(request GetAllJobsRequest) ([]Job, error) {
-
 	var jobs []Job
 
 	query := r.DB.Preload("Company").Order("created_at DESC")
@@ -47,7 +58,7 @@ func (r *repository) GetAllJob(request GetAllJobsRequest) ([]Job, error) {
 
 	err := query.Find(&jobs).Error
 	if err != nil {
-		return nil, err
+		return nil, appErrors.ErrInternalServer
 	}
 
 	return jobs, nil

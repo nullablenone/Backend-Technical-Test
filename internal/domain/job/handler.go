@@ -2,6 +2,7 @@ package job
 
 import (
 	"net/http"
+	"redikru-test/utils"
 
 	"github.com/gin-gonic/gin"
 )
@@ -18,43 +19,37 @@ func (h *Handler) CreateJobHandler(c *gin.Context) {
 	var request CreateJobRequest
 
 	err := c.ShouldBindJSON(&request)
+
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
-		})
+		utils.RespondError(c, http.StatusBadRequest, "Invalid request payload")
 		return
 	}
 
 	newJob, err := h.Service.CreateJob(request)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		utils.HandleError(c, err)
 		return
 	}
 
-	c.JSON(http.StatusCreated, gin.H{
-		"message": "Job posting created successfully",
-		"data":    newJob,
-	})
+	utils.RespondSuccess(c, http.StatusCreated, newJob, "Job posting created successfully")
 
 }
 
 func (h *Handler) GetAllJobHandler(c *gin.Context) {
-
 	var request GetAllJobsRequest
 
 	err := c.ShouldBindQuery(&request)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		utils.RespondError(c, http.StatusBadRequest, "Invalid request payload")
 		return
 	}
 
 	jobs, err := h.Service.GetAllJob(request)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve job postings"})
+		utils.HandleError(c, err)
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"data": jobs,
-	})
+	utils.RespondSuccess(c, http.StatusOK, jobs, "request berhasil")
+
 }
