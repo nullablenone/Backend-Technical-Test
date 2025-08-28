@@ -17,6 +17,7 @@ func RespondError(c *gin.Context, status int, message string) {
 	})
 }
 
+
 func RespondSuccess(c *gin.Context,  status int, data any, message string) {
 	c.JSON(status, gin.H{
 		"status":  "success",
@@ -24,6 +25,17 @@ func RespondSuccess(c *gin.Context,  status int, data any, message string) {
 		"data":    data,
 	})
 }
+
+func RespondSuccessWithPagination(c *gin.Context, status int, data any, pagination Pagination, message string) {
+	c.JSON(status, gin.H{
+		"status":     "sukses",
+		"message":    message,
+		"data":       data,
+		"pagination": pagination, // <-- Tambahkan objek pagination
+	})
+}
+
+
 
 func HandleError(c *gin.Context, err error) {
 	log.Printf("[ERROR] Detail: %v\n", err)

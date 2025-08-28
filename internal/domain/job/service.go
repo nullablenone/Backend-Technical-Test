@@ -1,10 +1,15 @@
 package job
 
-import "github.com/google/uuid"
+import (
+	"math"
+	"redikru-test/utils"
+
+	"github.com/google/uuid"
+)
 
 type Service interface {
 	CreateJob(request CreateJobRequest) (*Job, error)
-	GetAllJob(request GetAllJobsRequest) ([]Job, error)
+	GetAllJob(request GetAllJobsRequest) ([]Job, utils.Pagination, error)
 }
 
 type service struct {
@@ -30,10 +35,22 @@ func (s *service) CreateJob(request CreateJobRequest) (*Job, error) {
 	return &job, nil
 }
 
-func (s *service) GetAllJob(request GetAllJobsRequest) ([]Job, error) {
-	jobs, err := s.repository.GetAllJob(request)
+func (s *service) GetAllJob(request GetAllJobsRequest) ([]Job, utils.Pagination, error) { // <-- Ubah return
+	jobs, totalRecords, err := s.repository.GetAllJob(request)
 	if err != nil {
-		return nil, err
+		return nil, utils.Pagination{}, err
 	}
-	return jobs, nil
+
+	// Hitung total halaman
+	totalPages := int(math.Ceil(float64(totalRecords) / float64(request.Limit)))
+
+	// Siapkan struct pagination
+	pagination := utils.Pagination{
+		CurrentPage:  request.Page,
+		PerPage:      request.Limit,
+		TotalPages:   totalPages,
+		TotalRecords: totalRecords,
+	}
+
+	return jobs, pagination, nil
 }

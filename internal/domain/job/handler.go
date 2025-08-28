@@ -40,16 +40,27 @@ func (h *Handler) GetAllJobHandler(c *gin.Context) {
 
 	err := c.ShouldBindQuery(&request)
 	if err != nil {
-		utils.RespondError(c, http.StatusBadRequest, "Invalid request payload")
+		utils.RespondError(c, http.StatusBadRequest, "Parameter query tidak valid")
 		return
 	}
 
-	jobs, err := h.Service.GetAllJob(request)
+	if request.Page <= 0 {
+		request.Page = 1
+	}
+	if request.Limit <= 0 {
+		request.Limit = 10
+	}
+
+	if request.Limit > 100 {
+		request.Limit = 100
+	}
+
+	jobs, pagination, err := h.Service.GetAllJob(request)
 	if err != nil {
 		utils.HandleError(c, err)
 		return
 	}
 
-	utils.RespondSuccess(c, http.StatusOK, jobs, "request berhasil")
+	utils.RespondSuccessWithPagination(c, http.StatusOK, jobs, pagination, "Permintaan berhasil")
 
 }
