@@ -20,3 +20,19 @@ type cachedJobsResponse struct {
 	Jobs       []Job            `json:"jobs"`
 	Pagination utils.Pagination `json:"pagination"`
 }
+
+// khusus untuk swaggo
+type ResponseSuccessJob struct {
+	Status  string `json:"status" example:"success"`
+	Message string `json:"message" example:"Job posting created successfully"`
+	Data    Job    `json:"data"`
+}
+
+type ResponseSuccessGetJobs struct {
+	Status     string           `json:"status" example:"sukses"`
+	Message    string           `json:"message" example:"Permintaan berhasil"`
+	Data       []Job            `json:"data"`
+	Pagination utils.Pagination `json:"pagination"`
+}
+
+
