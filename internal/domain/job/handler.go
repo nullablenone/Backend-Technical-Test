@@ -15,6 +15,18 @@ func NewHandler(service Service) *Handler {
 	return &Handler{Service: service}
 }
 
+
+
+// @Summary Membuat lowongan pekerjaan baru
+// @Description Endpoint ini digunakan untuk menambahkan data lowongan pekerjaan baru.
+// @Tags Lowongan Pekerjaan
+// @Accept  json
+// @Produce  json
+// @Param   payload body CreateJobRequest true "Payload untuk membuat lowongan baru"
+// @Success 201 {object} utils.ResponseSuccess{data=Job} "Sukses membuat lowongan"
+// @Failure 400 {object} utils.ResponseError "Request payload tidak valid"
+// @Failure 500 {object} utils.ResponseError "Terjadi kesalahan internal pada server"
+// @Router /jobs [post]
 func (h *Handler) CreateJobHandler(c *gin.Context) {
 	var request CreateJobRequest
 
@@ -35,6 +47,19 @@ func (h *Handler) CreateJobHandler(c *gin.Context) {
 
 }
 
+
+// @Summary Mendapatkan daftar lowongan pekerjaan
+// @Description Mengambil daftar lowongan pekerjaan dengan urutan data terbaru dan dilengkapi dengan filter dan pagination.
+// @Tags Lowongan Pekerjaan
+// @Produce  json
+// @Param   keyword query string false "Pencarian berdasarkan kata kunci pada judul dan deskripsi lowongan."
+// @Param   companyName query string false "Filter berdasarkan nama perusahaan."
+// @Param   page query int false "Nomor halaman yang ingin ditampilkan." default(1)
+// @Param   limit query int false "Jumlah data yang ditampilkan per halaman." default(10)
+// @Success 200 {object} utils.ResponseSuccessWithPagination{data=[]Job} "Sukses mengambil data lowongan"
+// @Failure 400 {object} utils.ResponseError "Parameter query tidak valid"
+// @Failure 500 {object} utils.ResponseError "Terjadi kesalahan internal pada server"
+// @Router /jobs [get]
 func (h *Handler) GetAllJobHandler(c *gin.Context) {
 	var request GetAllJobsRequest
 

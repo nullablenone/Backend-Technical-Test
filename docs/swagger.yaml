@@ -1,0 +1,141 @@
+basePath: /
+definitions:
+  company.Company:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+    type: object
+  job.CreateJobRequest:
+    properties:
+      company_id:
+        type: string
+      description:
+        type: string
+      title:
+        type: string
+    required:
+    - company_id
+    - description
+    - title
+    type: object
+  job.Job:
+    properties:
+      company:
+        $ref: '#/definitions/company.Company'
+      companyID:
+        description: foreign key & relationship
+        type: string
+      createdAt:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      title:
+        type: string
+    type: object
+  utils.Pagination:
+    properties:
+      current_page:
+        type: integer
+      per_page:
+        type: integer
+      total_pages:
+        type: integer
+      total_records:
+        type: integer
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: Ini adalah API server untuk technical test Redikru.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Job API Redikru Test
+  version: "1.0"
+paths:
+  /jobs:
+    get:
+      description: Mengambil daftar semua lowongan pekerjaan dengan filter dan pagination
+      parameters:
+      - description: Kata kunci untuk pencarian di judul/deskripsi
+        in: query
+        name: keyword
+        type: string
+      - description: Nama perusahaan
+        in: query
+        name: companyName
+        type: string
+      - default: 1
+        description: Nomor halaman
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Jumlah data per halaman
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Pagination'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Mendapatkan semua lowongan pekerjaan
+      tags:
+      - jobs
+    post:
+      consumes:
+      - application/json
+      description: Menambahkan data lowongan pekerjaan baru ke dalam sistem
+      parameters:
+      - description: Data Lowongan Pekerjaan
+        in: body
+        name: job
+        required: true
+        schema:
+          $ref: '#/definitions/job.CreateJobRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/job.Job'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Membuat lowongan pekerjaan baru
+      tags:
+      - jobs
+swagger: "2.0"
