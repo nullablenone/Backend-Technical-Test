@@ -25,6 +25,9 @@ func main() {
 	// exe seeder
 	seeders.SeedCompanies(db)
 
+	// setup redis
+	config.ConnectRedis()
+
 	// setup domain job
 	jobRepository := job.NewRepository(db)
 	jobService := job.NewService(jobRepository)
