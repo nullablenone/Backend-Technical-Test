@@ -10,6 +10,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type ResponseError struct {
+	Status  string `json:"status" example:"error"`
+	Message string `json:"message" example:"Pesan error spesifik"`
+}
+
 func RespondError(c *gin.Context, status int, message string) {
 	c.JSON(status, gin.H{
 		"status":  "error",
@@ -31,7 +36,7 @@ func RespondSuccessWithPagination(c *gin.Context, status int, data any, paginati
 		"status":     "sukses",
 		"message":    message,
 		"data":       data,
-		"pagination": pagination, // <-- Tambahkan objek pagination
+		"pagination": pagination, 
 	})
 }
 
