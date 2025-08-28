@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/microcosm-cc/bluemonday"
 	"github.com/redis/go-redis/v9"
 )
 
@@ -29,10 +30,16 @@ func NewService(repo Repository, redisClient *redis.Client) Service {
 }
 
 func (s *service) CreateJob(request CreateJobRequest) (*Job, error) {
+
+	// sanitasi
+	p := bluemonday.UGCPolicy()
+	sanitizedTitle := p.Sanitize(request.Title)
+	sanitizedDescription := p.Sanitize(request.Description)
+
 	job := Job{
 		ID:          uuid.NewString(),
-		Title:       request.Title,
-		Description: request.Description,
+		Title:       sanitizedTitle,
+		Description: sanitizedDescription,
 		CompanyID:   request.CompanyID,
 	}
 
