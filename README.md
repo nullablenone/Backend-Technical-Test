@@ -6,17 +6,16 @@ Ini adalah proyek submission untuk technical test posisi Backend Engineer Intern
 
 REST API untuk platform lowongan pekerjaan yang memungkinkan pengguna untuk membuat dan melihat daftar pekerjaan. Aplikasi ini dibangun dengan Go (Gin) dan dirancang dengan arsitektur berlapis yang bersih (Handler, Service, Repository) untuk memastikan kode yang *scalable* dan mudah dikelola.
 
-## Fitur Unggulan
+## Solusi & Fitur Utama
 
-- **API Lengkap**: Menyediakan endpoint untuk `POST` dan `GET` data pekerjaan.
-- **Pencarian & Filter**: Mendukung pencarian berdasarkan kata kunci dan filter berdasarkan nama perusahaan.
-- **Performa Tinggi**: Menggunakan **Redis** sebagai *cache* untuk mempercepat respons pada endpoint `GET /jobs`, mengurangi beban pada database secara signifikan.
-- **Keamanan**:
-  - **Pencegahan Stored XSS**: Input dari pengguna dibersihkan (*sanitized*) menggunakan Bluemonday untuk mencegah serangan XSS.
-  - **Validasi Input**: Memastikan integritas data dengan validasi format UUID pada *request payload*.
-- **Dokumentasi API**: Dokumentasi interaktif yang lengkap disediakan menggunakan **Swagger**.
-- **Siap Jalan dengan Docker**: Seluruh aplikasi dan layanannya (PostgreSQL, Redis) sudah dibungkus dalam **Docker**, memungkinkan setup yang instan dengan satu perintah.
-- **Unit Test**: *Service layer* sudah dicakup oleh *unit test* yang solid menggunakan Testify dan Miniredis.
+* **API & Pencarian Cerdas**: Menyediakan endpoint `POST` dan `GET`. Endpoint `GET` mendukung **filter `keyword` dan `companyName`** untuk pencarian data yang cepat dan relevan.
+* **Performa untuk Skala Besar**:
+    * **Pagination**: Mengatasi "ribuan data" dengan membatasi jumlah data yang diambil dari database dalam satu waktu (`page` & `limit`).
+    * **Redis Caching**: Mengatasi "banyak pengguna" dengan menyimpan data di *cache*, sehingga respons API menjadi super cepat dan beban database berkurang drastis.
+* **Keamanan Anti XSS**: Mencegah serangan *XSS* dengan **membersihkan (sanitasi)** semua input dari pengguna sebelum disimpan ke database menggunakan Bluemonday.
+* **Membuat Unit Test**: Mencakup logika bisnis dan *caching* pada *service layer*.
+* **Dokumentasi API (Swagger)**: Dilengkapi dokumentasi API interaktif menggunakan **Swagger** untuk memudahkan penggunaan dan pemahaman endpoint yang ada.
+* **Setup Docker**: Memungkinkan seluruh aplikasi dan layanannya dijalankan dengan satu perintah mudah.
 
 ## Tech Stack
 
